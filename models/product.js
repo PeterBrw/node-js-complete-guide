@@ -9,9 +9,9 @@ class Product {
   }
 
   save() {
-    const db = getDb(); // this will use the connection to database
-    db.collection('products'). // this will create a collection 'products' if not exist one already
-      insertOne(this) // and here it will insert to that collection 'this' object
+    const db = getDb();
+    return db.collection('products').
+      insertOne(this) 
       .then(result => {
         console.log(result);
       })
