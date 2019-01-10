@@ -22,3 +22,4 @@ class Product {
 }
 
 module.exports = Product;
+// just to do a commit
