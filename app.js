@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   User.findById("5c384fdd8cb36a173893c1d1")
   .then(user => {
-    req.user = user;
+    req.user = new User(user.name, user.email, user.cart, user._id); // in this way we will can work with all the user properties(earlier we just stored here just an 'object' from the database with that id but we couldn't work with it's properties)
     next(); 
   })
   .catch(err => console.log(err)); 
