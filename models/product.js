@@ -7,7 +7,7 @@ class Product {
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
-    this._id = new mongodb.ObjectId(id); // just here we are using the mongodb.Objectid
+    this._id = id ? new mongodb.ObjectId(id) : null;
   }
 
   save() {
