@@ -35,12 +35,12 @@ class Product {
         console.log(err);
       }); 
   } 
-
-  static findById(prodId) {
+ 
+  static findById(prodId) { // trying to find a single product by id 
     const db = getDb();
     return db
-      .collection('products')
-      .find({_id: new mongodb.ObjectId(prodId) })
+      .collection('products') // in the collection 'products'
+      .find({_id: new mongodb.ObjectId(prodId) }) // in mongodb the id is stored as '_id', in mongodb as well we don't have js objects, that's why we have to translate that to js in some way 'new mongodb.ObjectId(prodId)' just if we are donig this it will fetch that id that we want
       .next()
       .then(product => {
         console.log(product);
