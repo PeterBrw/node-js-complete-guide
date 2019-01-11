@@ -1,5 +1,5 @@
 const mongodb = require('mongodb');
-const getDb = require('../util/database').getDb; 
+const getDb = require('../util/database').getDb;
 
 class Product {
   constructor(title, price, description, imageUrl, id) {
@@ -12,13 +12,14 @@ class Product {
 
   save() {
     const db = getDb();
-    let dbOp; // db operation(s)!?
-    if(this._id) {
+    let dbOp;
+    if (this._id) {
       // Update the product
-      dbOp = db.collection('products').updataOne({_id: new mongodb.ObjectId(this.id)}, {$set: this}); // here it will overwrite all the other fields, just 'id' not
-    } else {
       dbOp = db
-      .collection('products').insertOne(this)
+        .collection('products')
+        .updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this });
+    } else {
+      dbOp = db.collection('products').insertOne(this);
     }
     return dbOp
       .then(result => {
@@ -41,14 +42,14 @@ class Product {
       })
       .catch(err => {
         console.log(err);
-      }); 
-  } 
- 
-  static findById(prodId) { // trying to find a single product by id 
+      });
+  }
+
+  static findById(prodId) {
     const db = getDb();
     return db
-      .collection('products') // in the collection 'products'
-      .find({_id: new mongodb.ObjectId(prodId) }) // in mongodb the id is stored as '_id', in mongodb as well we don't have js objects, that's why we have to translate that to js in some way 'new mongodb.ObjectId(prodId)' just if we are donig this it will fetch that id that we want
+      .collection('products')
+      .find({ _id: new mongodb.ObjectId(prodId) })
       .next()
       .then(product => {
         console.log(product);
