@@ -1,3 +1,4 @@
+const mongodb = require('mongodb');
 const getDb = require('../util/database').getDb; 
 
 class Product {
@@ -32,8 +33,23 @@ class Product {
       })
       .catch(err => {
         console.log(err);
-      }); // this 'find()' it will return all the documents from the collection 'products', and it will not return a 'promise' it will return 'cursor;(an object provided by mongodb), all '.toArray()' it will turn all documents into JS array(we should use this just if we know that there are maximum 100 documents in our collection, otherwise is good to use 'pagination'(we will use it later in the course))
+      }); 
   } 
+
+  static findById(prodId) {
+    const db = getDb();
+    return db
+      .collection('products')
+      .find({_id: new mongodb.ObjectId(prodId) })
+      .next()
+      .then(product => {
+        console.log(product);
+        return product;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 }
 
 module.exports = Product;

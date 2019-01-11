@@ -141,7 +141,7 @@ exports.postOrder = (req, res, next) => {
         .catch(err => console.log(err));
     })
     .then(result => {
-      return fetchedCart.setProducts(null); // here we are setting (cartItems) to null
+      return fetchedCart.setProducts(null);
     })
     .then(result => {
       res.redirect('/orders');
@@ -151,12 +151,12 @@ exports.postOrder = (req, res, next) => {
 
 exports.getOrders = (req, res, next) => {
   req.user
-    .getOrders({include: ['products']})//see video for what in the parentesis // getOrders(from user in this case, our user, it's a magic from sequelize due to our relations which we set up )
+    .getOrders({include: ['products']})
     .then(orders => {
       res.render('shop/orders', {
         path: '/orders',
         pageTitle: 'Your Orders',
-        orders: orders // retrive orders
+        orders: orders 
       });
     })
     .catch(err => console.log(err));
