@@ -67,15 +67,28 @@ class User {
 
   deleteItemFromCart(productId) {
     const updatedCartItems = this.cart.items.filter(item => {
-      return item.productId.toString() !== productId.toString(); // select all the items which has no that id 
+      return item.productId.toString() !== productId.toString(); 
     });
     const db = getDb();
     return db 
       .collection('users')
       .updateOne(
         { _id: new ObjectId(this._id) },
-        { $set: { cart: {items: updatedCartItems} } } // update the database without that item
+        { $set: { cart: {items: updatedCartItems} } } 
       );
+  }
+
+  addOrder() {
+    const db = getDb();
+    return db.collection('orders').insertOne(this.cart).then(result => { // here we are inserting the cart into this 'order' method
+      this.cart = {items: []};
+      return db 
+      .collection('users')
+      .updateOne(
+        { _id: new ObjectId(this._id) },
+        { $set: { cart: {items: []} } } 
+      );
+    });   
   }
 
   static findById(userId) {
