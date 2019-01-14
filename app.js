@@ -32,9 +32,9 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-mongoose // with this we connecting to our database, mongoose will manage behind the scenes the connection with our database
+mongoose 
   .connect(
-    'mongodb+srv://maximilian:maximilian@cluster0-ntrwp.mongodb.net/test?retryWrites=true'
+    'mongodb+srv://maximilian:maximilian@cluster0-5pzzp.mongodb.net/test?retryWrites=true'
   )
   .then(result => {
     app.listen(3000);
