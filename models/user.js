@@ -67,28 +67,44 @@ class User {
 
   deleteItemFromCart(productId) {
     const updatedCartItems = this.cart.items.filter(item => {
-      return item.productId.toString() !== productId.toString(); 
+      return item.productId.toString() !== productId.toString();
     });
     const db = getDb();
-    return db 
+    return db
       .collection('users')
       .updateOne(
         { _id: new ObjectId(this._id) },
-        { $set: { cart: {items: updatedCartItems} } } 
+        { $set: { cart: { items: updatedCartItems } } }
       );
   }
 
   addOrder() {
     const db = getDb();
-    return db.collection('orders').insertOne(this.cart).then(result => { // here we are inserting the cart into this 'order' method
-      this.cart = {items: []};
-      return db 
-      .collection('users')
-      .updateOne(
-        { _id: new ObjectId(this._id) },
-        { $set: { cart: {items: []} } } 
-      );
-    });   
+    return this.getCart()
+      .then(products => {
+        const order = {
+          items: products,
+          user: {
+            _id: new ObjectId(this._id),
+            name: this.name
+          }
+        };
+        return db.collection('orders').insertOne(order);
+      })
+      .then(result => {
+        this.cart = { items: [] };
+        return db
+          .collection('users')
+          .updateOne(
+            { _id: new ObjectId(this._id) },
+            { $set: { cart: { items: [] } } }
+          );
+      });
+  }
+
+  getOrders() {
+    const db = getDB();
+    // return db.collection('orders').
   }
 
   static findById(userId) {
