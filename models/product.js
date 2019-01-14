@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const productSchema = new Schema({ // here to input an object, how your data you want to look like, and you define Schema with simple key-value pairs
-  title: {   // Schema for an object that has title of type  String
+const productSchema = new Schema({ 
+  title: {  
     type: String,
-    required: true // this for every object to have a title
+    required: true 
   },
   price: {
     type: Number,
@@ -19,8 +19,9 @@ const productSchema = new Schema({ // here to input an object, how your data you
     type: String,
     required: true
   }
-}); // we don't add id or _id because this will be added automatically as an object ID
+}); 
 
+module.exports = mongoose.model('Product', productSchema) 
 
 // const mongodb = require('mongodb');
 // const getDb = require('../util/database').getDb;
