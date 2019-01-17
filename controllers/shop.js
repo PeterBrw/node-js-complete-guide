@@ -18,7 +18,7 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
-  Product.findById(prodId) 
+  Product.findById(prodId)
     .then(product => {
       res.render('shop/product-detail', {
         product: product,
@@ -45,7 +45,7 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   req.user
-    .populate('cart.items.productId') 
+    .populate('cart.items.productId')
     .execPopulate()
     .then(user => {
       const products = user.cart.items;
@@ -107,8 +107,7 @@ exports.postOrder = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-  req.user
-    .getOrders()
+  Order.find({ 'user.userId': req.user._id })
     .then(orders => {
       res.render('shop/orders', {
         path: '/orders',
