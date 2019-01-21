@@ -4,18 +4,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session); // importing connect-mongodb-session which will give us a function and we will pass the session as argument to that function
+const MongoDBStore = require('connect-mongodb-session')(session); 
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
 
-const MONGODB_URI = 'mongodb+srv://maximilian:maximilian@cluster0-5pzzp.mongodb.net/shop'; // the connection URI to our mongo database
+const MONGODB_URI = 'mongodb+srv://maximilian:maximilian@cluster0-5pzzp.mongodb.net/shop'; 
 
 const app = express();
 
-const store = new MongoDBStore({ // here we are connecting our sessions to the database
-  uri: MONGODB_URI, // the connection URI to our mongo database
-  collection: 'sessions' // creating a collection 'sessions'
+const store = new MongoDBStore({ 
+  uri: MONGODB_URI, 
+  collection: 'sessions' 
 });
 
 app.set('view engine', 'ejs');
@@ -32,7 +32,7 @@ app.use(
     secret: 'my secret', 
     resave: false, 
     saveUninitialized: false, 
-    store: store // 'store: store' means that all the sessions will be stored in our databese which was define in 'store' variable above
+    store: store // this middleware will automatically set a cookie for us and automatically reads the cookie for us as well
   })
 ); 
 
@@ -53,7 +53,7 @@ app.use(errorController.get404);
 
 mongoose 
   .connect(
-    MONGODB_URI // the connection URI to our mongo database 
+    MONGODB_URI 
   )
   .then(result => {
     User.findOne().then(user => { 
