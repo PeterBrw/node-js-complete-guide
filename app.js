@@ -37,10 +37,10 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  if(!req.session.user){ // if there is no 'user' it will execute the next middleware
+  if(!req.session.user){ 
     return next();
   }
-  User.findById(req.session.user._id) // here the id of the user we are taking it from session
+  User.findById(req.session.user._id) 
     .then(user => {
       req.user = user;
       next();
