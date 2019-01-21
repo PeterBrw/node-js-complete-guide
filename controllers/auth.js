@@ -18,9 +18,15 @@ exports.postLogin = (req, res, next) => {
   User.findById('5c3db72f04b84d2068ef4f14') 
     .then(user => {
       req.session.isLoggedIn = true;
-      req.session.user = user; // here we are assing the user to the session not any to the request 
+      req.session.user = user; 
       res.redirect('/');
     })
-    .catch(err => console.log(err));
-  
+    .catch(err => console.log(err)); 
+}; 
+
+exports.postLogout = (req, res, next) => {
+ req.session.destroy((err) => {  // this will destroy the session 
+  console.log(err);
+  res.redirect('/');
+ });
 }; 
