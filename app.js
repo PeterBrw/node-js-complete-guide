@@ -36,6 +36,18 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  if(!req.session.user){ // if there is no 'user' it will execute the next middleware
+    return next();
+  }
+  User.findById(req.session.user._id) // here the id of the user we are taking it from session
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err)); 
+});
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
