@@ -1,6 +1,9 @@
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
+  if(!req.session.isLoggedIn) {
+    return res.redirect('/login'); // if there is no user logged in we are redirecting to to 'login' page
+  }
   res.render('admin/edit-product', {
     pageTitle: 'Add Product',
     path: '/admin/add-product',
@@ -87,7 +90,7 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         pageTitle: 'Admin Products',
         path: '/admin/products',
-        isAuthenticated: req.session.isLoggedIn // here we can find if the user is authenticated cause we set the 'cookie' in controllers/auth.js
+        isAuthenticated: req.session.isLoggedIn 
       });
     })
     .catch(err => console.log(err));
