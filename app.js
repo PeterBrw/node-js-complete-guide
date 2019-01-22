@@ -56,7 +56,7 @@ app.use(errorController.get404);
 
 mongoose
   .connect(MONGODB_URI)
-  .then(result => { // here we don't need the dummy user anymore cause we can create one
+  .then(result => { 
     app.listen(3000);
   })
   .catch(err => {
