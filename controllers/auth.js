@@ -135,7 +135,7 @@ exports.getReset = (req, res, next) => {
 }
 
 exports.postReset = (req, res, next) => {
-  crypto.randomBytes(32, (err, buffer) => { this case
+  crypto.randomBytes(32, (err, buffer) => { 
     if(err) {
       console.log(err);
       return res.redirect('/reset');
@@ -149,7 +149,6 @@ exports.postReset = (req, res, next) => {
         }
         user.resetToken = token; 
         user.resetTokenExpiration = Date.now() + 3600000; 
-        return user.save(); 
       })
       .then(result => {
         res.redirect('/');
