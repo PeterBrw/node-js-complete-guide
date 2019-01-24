@@ -6,15 +6,14 @@ exports.getLogin = (req, res, next) => {
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
-    isAuthenticated: false
+    errorMessage: req.flash('error') // here we are rendering the errorMessage from the session just accessing the req.flash('error') just the key of that message
   });
 };
 
 exports.getSignup = (req, res, next) => {
   res.render('auth/signup', {
     path: '/signup',
-    pageTitle: 'Signup',
-    isAuthenticated: false
+    pageTitle: 'Signup'
   });
 };
 
@@ -25,6 +24,7 @@ exports.postLogin = (req, res, next) => {
   User.findOne({email: email})
     .then(user => {
       if(!user) {
+        req.flash('error', 'Invalid email or password'); // here we creating a message with key 'error' and message 'Invalid email or password' which are stored in a session
         return res.redirect('login');
       }
       bcrypt
