@@ -1,41 +1,44 @@
-const crypto = require('crypto'); 
+const crypto = require('crypto');
 
-const bcrypt = require('bcryptjs'); 
-const nodemailer = require('nodemailer'); 
-const sendgridTransport = require('nodemailer-sendgrid-transport'); 
-
-const transporter = nodemailer.createTransport(sendgridTransport({ 
-  auth: { 
-    api_key: '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' 
-  }
-}));
+const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
 
 const User = require('../models/user');
 
+const transporter = nodemailer.createTransport(
+  sendgridTransport({
+    auth: {
+      api_key:
+        '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'
+    }
+  })
+);
+
 exports.getLogin = (req, res, next) => {
-  let message = req.flash('error'); 
-  if(message.length > 0) { 
-    mesasge = message[0]; 
+  let message = req.flash('error');
+  if (message.length > 0) {
+    message = message[0];
   } else {
-    message = null; 
+    message = null;
   }
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
-    errorMessage: message 
+    errorMessage: message
   });
 };
 
 exports.getSignup = (req, res, next) => {
-  let message = req.flash('error'); 
-  if(message.length > 0) { 
-    mesasge = message[0]; 
+  let message = req.flash('error');
+  if (message.length > 0) {
+    message = message[0];
   } else {
-    message = null; 
+    message = null;
   }
   res.render('auth/signup', {
     path: '/signup',
-    pageTitle: 'Signup', 
+    pageTitle: 'Signup',
     errorMessage: message
   });
 };
@@ -43,31 +46,30 @@ exports.getSignup = (req, res, next) => {
 exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-
-  User.findOne({email: email})
+  User.findOne({ email: email })
     .then(user => {
-      if(!user) {
-        req.flash('error', 'Invalid email or password'); 
-        return res.redirect('login');
+      if (!user) {
+        req.flash('error', 'Invalid email or password.');
+        return res.redirect('/login');
       }
       bcrypt
-        .compare(password, user.password) 
+        .compare(password, user.password)
         .then(doMatch => {
-          if(doMatch) { 
+          if (doMatch) {
             req.session.isLoggedIn = true;
             req.session.user = user;
             return req.session.save(err => {
               console.log(err);
-              return res.redirect('/');
-            });  
+              res.redirect('/');
+            });
           }
-          req.flash('error', 'Invalid email or password');
-          res.redirect('/login'); 
+          req.flash('error', 'Invalid email or password.');
+          res.redirect('/login');
         })
         .catch(err => {
           console.log(err);
           res.redirect('/login');
-        }); 
+        });
     })
     .catch(err => console.log(err));
 };
@@ -98,8 +100,8 @@ exports.postSignup = (req, res, next) => {
         .then(result => {
           res.redirect('/login');
           return transporter.sendMail({
-            to: email, 
-            from: 'shop@node-complete.com', 
+            to: email,
+            from: 'shop@node-complete.com',
             subject: 'Signup succeeded!',
             html: '<h1>You successfully signed up!</h1>'
           });
@@ -121,44 +123,45 @@ exports.postLogout = (req, res, next) => {
 };
 
 exports.getReset = (req, res, next) => {
-  let message = req.flash('error'); 
-  if(message.length > 0) { 
-    mesasge = message[0]; 
+  let message = req.flash('error');
+  if (message.length > 0) {
+    message = message[0];
   } else {
-    message = null; 
+    message = null;
   }
   res.render('auth/reset', {
     path: '/reset',
-    pageTitle: 'Reset Password', 
+    pageTitle: 'Reset Password',
     errorMessage: message
   });
-}
+};
 
 exports.postReset = (req, res, next) => {
-  crypto.randomBytes(32, (err, buffer) => { 
-    if(err) {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
       console.log(err);
       return res.redirect('/reset');
     }
-    const token = buffer.toString('hex'); 
-    User.findOne({email: req.body.email})  
+    const token = buffer.toString('hex');
+    User.findOne({ email: req.body.email })
       .then(user => {
-        if(!user) {
+        if (!user) {
           req.flash('error', 'No account with that email found.');
           return res.redirect('/reset');
         }
-        user.resetToken = token; 
-        user.resetTokenExpiration = Date.now() + 3600000; 
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        return user.save();
       })
       .then(result => {
         res.redirect('/');
         transporter.sendMail({
-          to: req.body.email, 
-          from: 'shop@node-complete.com', 
+          to: req.body.email,
+          from: 'shop@node-complete.com',
           subject: 'Password reset',
           html: `
             <p>You requested a password reset</p>
-            <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password</p>
+            <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
           `
         });
       })
@@ -166,4 +169,4 @@ exports.postReset = (req, res, next) => {
         console.log(err);
       });
   });
-}
+};

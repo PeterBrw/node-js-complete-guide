@@ -12,14 +12,14 @@ const errorController = require('./controllers/error');
 const User = require('./models/user');
 
 const MONGODB_URI =
-'mongodb+srv://maximilian:maximilian@cluster0-5pzzp.mongodb.net/shop'
+  'mongodb+srv://maximilian:maximilian@cluster0-5pzzp.mongodb.net/shop';
 
 const app = express();
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: 'sessions'
 });
-const csrfProtection = csrf(); 
+const csrfProtection = csrf();
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -38,24 +38,24 @@ app.use(
     store: store
   })
 );
-app.use(csrfProtection); 
-app.use(flash()); 
+app.use(csrfProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
-  if(!req.session.user){ 
+  if (!req.session.user) {
     return next();
   }
-  User.findById(req.session.user._id) 
+  User.findById(req.session.user._id)
     .then(user => {
       req.user = user;
       next();
     })
-    .catch(err => console.log(err)); 
+    .catch(err => console.log(err));
 });
 
 app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn; 
-  res.locals.csrfToken = req.csrfToken(); 
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
   next();
 });
 
@@ -67,7 +67,7 @@ app.use(errorController.get404);
 
 mongoose
   .connect(MONGODB_URI)
-  .then(result => { 
+  .then(result => {
     app.listen(3000);
   })
   .catch(err => {

@@ -11,8 +11,8 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  resetToken: String, 
-  resetTokenExpiration: Date, 
+  resetToken: String,
+  resetTokenExpiration: Date,
   cart: {
     items: [
       {
@@ -58,12 +58,10 @@ userSchema.methods.removeFromCart = function(productId) {
   return this.save();
 };
 
-userSchema.methods.clearCart = function() { 
+userSchema.methods.clearCart = function() {
   this.cart = { items: [] };
   return this.save();
 };
-
-module.exports = mongoose.model('User', userSchema);
 
 module.exports = mongoose.model('User', userSchema);
 
@@ -175,7 +173,7 @@ module.exports = mongoose.model('User', userSchema);
 //     const db = getDb();
 //     return db
 //       .collection('orders')
-//       .find({'user._id': new ObjectId(this._id)}) // return all the orders for this user
+//       .find({ 'user._id': new ObjectId(this._id) })
 //       .toArray();
 //   }
 
