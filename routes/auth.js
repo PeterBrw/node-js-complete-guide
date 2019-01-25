@@ -24,11 +24,17 @@ router.post(
         return true;
       }), 
     body(
-      'password', // look for the 'password' in the body of the request
-       'Please enter a password with only numbers and text and at least 5 characters.' // default error message for this (password validator)
+      'password', 
+       'Please enter a password with only numbers and text and at least 5 characters.' 
       ) 
-      .isLength({ min: 5 }) // minim length of the 'password' to be 5 characters
-      .isAlphanumeric()   // in production we should use something more complex than this
+      .isLength({ min: 5 }) 
+      .isAlphanumeric(),
+    body('confirmPassword').custom((value, { req }) => {
+      if(value !== req.body.password) {
+        throw new Error('Passwords have to match!');
+      }
+      return true;
+    })      
   ],
   authController.postSignup
 );
