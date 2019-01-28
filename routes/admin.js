@@ -16,22 +16,21 @@ router.get('/products', isAuth, adminController.getProducts);
 
 // /admin/add-product => POST
 router.post(
-  '/add-product', 
+  '/add-product',
   [
-  body('title')
-    .isString()
-    .isLength({ min: 3 })
-    .trim(),
-  body('imageUrl')
-    .isURL(),
-  body('price').isFloat(),
-  body('description')
-    .isLength({ min: 5, max: 400 })
-    .trim() 
+    body('title')
+      .isString()
+      .isLength({ min: 3 })
+      .trim(),
+    body('imageUrl').isURL(),
+    body('price').isFloat(),
+    body('description')
+      .isLength({ min: 5, max: 400 })
+      .trim()
   ],
-  isAuth, 
-  adminController.postAddProduct)
-;
+  isAuth,
+  adminController.postAddProduct
+);
 
 router.get('/edit-product/:productId', isAuth, adminController.getEditProduct);
 
@@ -39,18 +38,18 @@ router.post(
   '/edit-product',
   [
     body('title')
-      .isAlphanumeric()
+      .isString()
       .isLength({ min: 3 })
       .trim(),
-    body('imageUrl')
-      .isURL(),
+    body('imageUrl').isURL(),
     body('price').isFloat(),
     body('description')
       .isLength({ min: 5, max: 400 })
-      .trim() 
-    ], 
-  isAuth, 
-  adminController.postEditProduct);
+      .trim()
+  ],
+  isAuth,
+  adminController.postEditProduct
+);
 
 router.post('/delete-product', isAuth, adminController.postDeleteProduct);
 
