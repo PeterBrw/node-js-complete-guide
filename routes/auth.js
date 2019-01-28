@@ -2,7 +2,7 @@ const express = require('express');
 const { check, body } = require('express-validator/check');
 
 const authController = require('../controllers/auth');
-const User = require('../models/user'); // importin 'User' model
+const User = require('../models/user');
 
 const router = express.Router();
 
@@ -10,7 +10,18 @@ router.get('/login', authController.getLogin);
 
 router.get('/signup', authController.getSignup);
 
-router.post('/login', authController.postLogin);
+router.post(
+  '/login',
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Please enter a valid email address.'),
+    body('password', 'Password has to be valid.')
+      .isLength({ min: 5 })
+      .isAlphanumeric()
+  ],
+  authController.postLogin
+);
 
 router.post(
   '/signup',
@@ -23,9 +34,9 @@ router.post(
         //   throw new Error('This email address if forbidden.');
         // }
         // return true;
-        return User.findOne({ email: value }).then(userDoc => { 
-          if (userDoc) { 
-            return Promise.reject( 
+        return User.findOne({ email: value }).then(userDoc => {
+          if (userDoc) {
+            return Promise.reject(
               'E-Mail exists already, please pick a different one.'
             );
           }
