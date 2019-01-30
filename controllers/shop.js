@@ -1,5 +1,5 @@
-const fs = require('fs'); // importing fs
-const path = require('path'); // importing path
+const fs = require('fs'); 
+const path = require('path'); 
 
 const Product = require('../models/product');
 const Order = require('../models/order');
@@ -158,6 +158,8 @@ exports.getInvoice = (req, res, next) => {
     if(err) {
      return next(err);
     }
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName +'"'); 
     res.send(data);
   });
 };
