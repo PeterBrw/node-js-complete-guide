@@ -174,12 +174,12 @@ exports.getInvoice = (req, res, next) => {
       pdfDoc.pipe(fs.createWriteStream(invoicePath)); 
       pdfDoc.pipe(res); 
 
-      pdfDoc.fontSize(26).text('Invoice', { // font size for this row will be 26
+      pdfDoc.fontSize(26).text('Invoice', { 
         underline: true
       }); 
       pdfDoc.text('------------------------');
       let totalPrice = 0;
-      order.products.forEach(prod => { // looping through products from this order
+      order.products.forEach(prod => { 
         totalPrice += prod.quantity * prod.product.price;
         pdfDoc
           .fontSize(14)
