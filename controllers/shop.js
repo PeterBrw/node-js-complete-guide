@@ -43,7 +43,7 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  const page = req.query.page; 
+  const page = +req.query.page || 1;
   let totalItems;
 
   Product.find()
@@ -59,7 +59,7 @@ exports.getIndex = (req, res, next) => {
       prods: products,
       pageTitle: 'Shop',
       path: '/',
-      totalItems: totalItems,
+      currentPage: page,
       hasNextPage: ITEMS_PER_PAGE * page < totalItems, 
       hasPreviousPage: page > 1, 
       nextPage: page + 1, 
