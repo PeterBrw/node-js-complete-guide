@@ -29,6 +29,7 @@
     "helmet": "^3.15.1",
     "mongodb": "^3.1.10",
     "mongoose": "^5.4.3",
+    "morgan": "^1.9.1",
     "multer": "^1.4.1",
     "mysql2": "^1.6.4",
     "nodemailer": "^5.1.1",
