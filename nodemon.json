@@ -1,0 +1,8 @@
+{
+  "env": {
+    "MONGO_USER": "maximilian",
+    "MONGO_PASSWORD": "maximilian",
+    "MONGO_DEFAULT_DATABASE": "shop",
+    "process.env.STRIPE_KEY": "sk_test_9hW0q26NBUrbjQLfMPR1MNgg"
+  }
+}
